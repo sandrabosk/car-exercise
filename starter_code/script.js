@@ -1,7 +1,7 @@
 window.onload = function() {
 
   function interval(){
-    setInterval(updateCanvas, 100);
+    setInterval(updateCanvas, 50);
   }
 
 
@@ -104,8 +104,8 @@ window.onload = function() {
     createGameBoard();
     drawCar();
     for(var i = 0; i < myObstacles.length; i++){
+      // myObstacles[i].y +=10;
       myObstacles[i].createObstacle();
-      myObstacles[i].y +=10;
     }
   }
 
@@ -117,6 +117,24 @@ window.onload = function() {
     this.createObstacle = function(){
       ctx.fillStyle = "yellow";
       ctx.fillRect(this.x, this.y, this.width, this.height)
+    }
+    this.left = function(){
+      return this.x
+    }
+    this.right = function(){
+      return this.x + this.width
+    }
+    this.top = function(){
+      return this.y
+    }
+    this.bottom = function(){
+      return this.y + this.height
+    }
+
+    this.checkCollision = function(obstacle){
+      return !((car.y > obstacle.bottom()) || 
+      (car.x + 40 < obstacle.left()) || 
+      (car.x + 40 > obstacle.right()))
     }
 
   }
@@ -139,14 +157,27 @@ window.onload = function() {
    
     for(var i = 0; i < myObstacles.length; i++){
       // console.log(myObstacles)
-      myObstacles[i].createObstacle();
       myObstacles[i].y += 10;
+      myObstacles[i].createObstacle();
+
+      if(myObstacles[i].checkCollision(myObstacles[i]) === true){
+        // console.log("collision detected");
+        setTimeout(function(){
+          alert("Crashed!");
+        }, 30)
+        board.score = 0;
+        board.frames = 0;
+        myObstacles = [];
+        startGame();
+      }
+
+
+      if(myObstacles[i].y > 600){
+        myObstacles.splice(i, 1);
+        board.score++;
+      }
     }
 
-    if(myObstacles[i].y > 600){
-      myObstacles.splice(i, 1);
-      board.score++;
-    }
 
 
   }
