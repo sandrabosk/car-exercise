@@ -1,6 +1,8 @@
 window.onload = function() {
 
   function interval(){
+    //                   milliseconds
+    //                        |
     setInterval(updateCanvas, 50);
   }
 
@@ -15,8 +17,10 @@ window.onload = function() {
     createGameBoard();
     drawCar();
   }
-
+  
+  // declare variable "theCanvas" which will contain DOM element which has id with value "game-board"
   var theCanvas = document.getElementById("game-board");
+  // declare variable ctx (aka context) which will use previously defined canvas (.getContext('2d') always stays the same)
   var ctx = theCanvas.getContext("2d");
 
   function createGameBoard(){
@@ -89,6 +93,9 @@ window.onload = function() {
   var myObstacles = [];
   var board = {
     score: 0,
+    // we add a frames variable on board object because this will help us to count 
+    // how many times we call the updateCanvas() function. This way, we can push new 
+    // obstacles every certain amount of updates.
     frames: 0
   }
 
